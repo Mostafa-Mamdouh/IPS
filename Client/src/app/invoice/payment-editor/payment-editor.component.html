@@ -1,0 +1,190 @@
+<form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+  <div class="form-row mb-3">
+    <div class="col-md-4">
+      <label class="control-label"
+        >Type<span class="text-danger">*</span></label
+      >
+    </div>
+    <div class="col-md-7">
+      <ng-select
+        [items]="paymentType"
+        bindLabel="name"
+        appendTo="body"
+        formControlName="type"
+        (change)="onChangePaymentType()"
+      >
+      </ng-select>
+      <span
+        class="text-danger"
+        *ngIf="
+          paymentForm.get('type').invalid &&
+          paymentForm.get('type').touched &&
+          paymentForm.get('type').errors['required']
+        "
+        >Payment Type is required</span
+      >
+    </div>
+  </div>
+  <div class="form-row mb-3">
+    <div class="col-md-4">
+      <label class="control-label"
+        >Amount<span class="text-danger">*</span></label
+      >
+    </div>
+    <div class="col-md-7">
+      <input
+        id=""
+        formControlName="amount"
+        class="form-control"
+        min="0"
+        type="number"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          paymentForm.get('amount').invalid &&
+          paymentForm.get('amount').touched &&
+          paymentForm.get('amount').errors['min']
+        "
+        >Min value is zero</span
+      >
+      <span
+        class="text-danger"
+        *ngIf="
+          paymentForm.get('amount').invalid &&
+          paymentForm.get('amount').touched &&
+          paymentForm.get('amount').errors['max']
+        "
+        >The payment amount shouldn’t exceed the invoice due amount</span
+      >
+      <span
+        class="text-danger"
+        *ngIf="
+          paymentForm.get('amount').invalid &&
+          paymentForm.get('amount').touched &&
+          paymentForm.get('amount').errors['required']
+        "
+        >Amount is required</span
+      >
+    </div>
+  </div>
+  <div class="form-row mb-3">
+    <div class="col-md-4">
+      <label class="control-label"
+        >Payment Date<span class="text-danger">*</span></label
+      >
+    </div>
+    <div class="col-md-7">
+      <input
+        type="text"
+        class="form-control"
+        bsDatepicker
+        [minDate]="maxPaymentDate"
+        formControlName="paymentDate"
+        [bsConfig]="{
+          dateInputFormat: 'DD-MM-YYYY',
+          showClearButton: true,
+          clearPosition: 'right',
+          showTodayButton: true,
+          todayPosition: 'left',
+          isAnimated: true
+        }"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          paymentForm.get('paymentDate').invalid &&
+          paymentForm.get('paymentDate').touched &&
+          paymentForm.get('paymentDate').errors['required']
+        "
+        >payment Date is required</span
+      >
+    </div>
+  </div>
+  <div class="form-row mb-3">
+    <div class="col-md-4">
+      <label class="control-label"
+        >Payment Method<span class="text-danger">*</span></label
+      >
+    </div>
+    <div class="col-md-7">
+      <ng-select
+        [items]="paymentMethod"
+        bindLabel="name"
+        appendTo="body"
+        formControlName="paymentMethod"
+        (change)="onChangePaymentMethod()"
+      >
+      </ng-select>
+      <span
+        class="text-danger"
+        *ngIf="
+          paymentForm.get('paymentMethod').invalid &&
+          paymentForm.get('paymentMethod').touched &&
+          paymentForm.get('paymentMethod').errors['required']
+        "
+        >Payment Method is required</span
+      >
+    </div>
+  </div>
+  <div class="form-row mb-3" *ngIf="isBankOrCheque">
+    <div class="col-md-4">
+      <label class="control-label"
+        >{{
+          paymentForm.controls['paymentMethod'].value.id == 2
+            ? 'Cheque Number'
+            : 'Transfer Number'
+        }}<span class="text-danger">*</span></label
+      >
+    </div>
+    <div class="col-md-7">
+      <input
+        id=""
+        formControlName="transactionNumber"
+        class="form-control"
+        type="text"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          paymentForm.get('transactionNumber').invalid &&
+          paymentForm.get('transactionNumber').touched &&
+          paymentForm.get('transactionNumber').errors['required']
+        "
+        >Cheque/ Bank Transfer Number is required</span
+      >
+    </div>
+  </div>
+  <div class="form-row mb-3">
+    <div class="col-md-4">
+      <label class="control-label">Attachment</label>
+    </div>
+    <div class="col-md-7">
+      <app-upload-file
+        (onFileUploaded)="attachArchieveId($event)"
+      ></app-upload-file>
+
+      <input
+        id=""
+        formControlName="archiveId"
+        class="form-control"
+        type="hidden"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          paymentForm.get('archiveId').invalid &&
+          paymentForm.get('archiveId').touched &&
+          paymentForm.get('archiveId').errors['required']
+        "
+        >Attachment is required</span
+      >
+    </div>
+  </div>
+
+  <div class="col-md-11">
+    <button type="submit" id="Save" class="btn btn-primary pull-right">
+      <i class="fa fa-save"> Save</i>
+    </button>
+  </div>
+</form>

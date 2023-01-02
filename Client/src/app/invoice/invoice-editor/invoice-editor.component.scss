@@ -1,0 +1,19 @@
+.total,
+.productName,
+.serviceName,
+.taxAmount,
+.transferAmount,
+.totalInvoice {
+  color: #1f6b9e;
+}
+
+.perc {
+  padding-top: 10px;
+}
+.amount {
+  padding-top: 5px;
+}
+.productName {
+  white-space: pre-wrap;
+  text-align: inherit;
+}

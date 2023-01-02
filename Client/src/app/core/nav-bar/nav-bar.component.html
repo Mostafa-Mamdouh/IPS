@@ -1,0 +1,12 @@
+<ng-container *ngIf="currentUser$ | async as user">
+<header>
+  <div class="headerwrapper">
+      <div class="header-left">
+         <!-- <img src="assets/images/IBS.jpg" class="logo" /> -->
+      </div>
+      <div class="header-right">
+          <a class="btn btn-social-icon btn-github hidden-sm-down" (click)="logout()" target="_blank"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+      </div><!-- header-right -->
+  </div><!-- headerwrapper -->
+</header>
+</ng-container>

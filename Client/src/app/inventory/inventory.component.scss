@@ -1,0 +1,16 @@
+.category{
+    width: 200px;
+}
+
+.action-button {
+    margin-right: 10px;
+    color: #007bff !important;
+    cursor: pointer;
+    
+    &:last-child {
+        margin-right: 0;
+    }
+}
+.delete{
+    color: #007bff !important;
+}

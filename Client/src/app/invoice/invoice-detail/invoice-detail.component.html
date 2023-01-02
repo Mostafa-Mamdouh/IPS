@@ -1,0 +1,436 @@
+<div class="" id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row row-stat">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading panel-heading-divider">
+            View {{ invoiceType == 1 ? 'Purchase' : 'Sales' }} Invoice<span
+              class="panel-subtitle"
+              >Show {{ invoiceType == 1 ? 'purchase' : 'sales' }} invoice
+              information</span
+            >
+          </div>
+          <div class="panel-body">
+            <div class="panel-heading panel-heading-no-divider">
+              <app-section-header></app-section-header>
+            </div>
+
+            <div *ngIf="invoice" class="row form-horizontal">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Status</label>
+                    <div class="col-sm-7">
+                      <div>
+                        <span
+                          *ngIf="!invoice.deleted"
+                          class="badge badge-success"
+                          >Active</span
+                        >
+                        <span *ngIf="invoice.deleted" class="badge badge-danger"
+                          >Cancelled</span
+                        >
+                        <span *ngIf="invoice.isTax" class="badge badge-info">
+                          ضريبية
+                        </span>
+                        <span
+                          *ngIf="!invoice.isTax"
+                          class="badge badge-warning"
+                        >
+                          غير ضريبية
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 actions">
+                <button
+                  *ngIf="invoiceType == 2 && !invoice.deleted"
+                  class="action-button print"
+                  printSectionId="print-section"
+                  [useExistingCss]="true"
+                  ngxPrint
+                >
+                  <i class="fa fa-print"></i>
+                </button>
+
+                <a
+                  *ngIf="!invoice.deleted && invoicePaymentItems.length == 0"
+                  (click)="openDeleteInvoiceModal(deleteInvoiceTemplate)"
+                  class="action-button"
+                >
+                  <i class="fa fa-ban" aria-hidden="true"></i
+                ></a>
+                <span
+                  class="action-button"
+                  *hasClaim="'Sales:Edit Sales Invoice'"
+                >
+                  <a
+                    [routerLink]="['/purchase-invoice/edit/' + invoice.id]"
+                    *ngIf="
+                      !invoice.deleted &&
+                      invoiceType == 1 &&
+                      invoicePaymentItems.length == 0
+                    "
+                    class="action-button"
+                  >
+                    <i class="fa fa-edit"></i
+                  ></a>
+                </span>
+                <span
+                  class="action-button"
+                  *hasClaim="'Sales:Edit Purchasing Invoice'"
+                >
+                  <a
+                    [routerLink]="['/sales-invoice/edit/' + invoice.id]"
+                    *ngIf="
+                      !invoice.deleted &&
+                      invoiceType == 2 &&
+                      invoicePaymentItems.length == 0
+                    "
+                    class="action-button"
+                  >
+                    <i class="fa fa-edit"></i
+                  ></a>
+                </span>
+              </div>
+              <br />
+              <br />
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Invoice ID</label>
+                    <div class="col-sm-7">
+                      <label class="control-label value">{{
+                        invoice.id
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">
+                      Invoice Number
+                    </label>
+                    <div class="col-sm-7">
+                      <label
+                        *ngIf="invoice.isTax"
+                        class="control-label value"
+                        >{{
+                          invoiceType == 1
+                            ? invoice.purchaseInvoiceNumber
+                            : invoice.salesInvoiceNumber
+                        }}</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">{{
+                      invoiceType == 1 ? 'Supplier' : 'Client'
+                    }}</label>
+                    <div class="col-sm-7">
+                      <label class="control-label value">{{
+                        invoiceType == 1
+                          ? invoice.supplierName
+                          : invoice.clientName
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="invoiceType == 2" class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"> Broker Name </label>
+                    <div class="col-sm-7">
+                      <label class="control-label value">{{
+                        invoice.brokerName
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Invoice Date</label>
+                    <div class="col-sm-7">
+                      <label class="control-label value">{{
+                        invoice.invoiceDate | date
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Product</label>
+                    <div class="col-sm-7">
+                      <label class="value">{{ invoiceProducts }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Service</label>
+                    <div class="col-sm-7">
+                      <label class="value">{{ invoiceServices }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Note</label>
+                    <div class="col-sm-7">
+                      <label id="" class="control-label value">{{
+                        invoice.note
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-8" *ngIf="invoiceProductItems.length > 0">
+                <accordion [isAnimated]="true">
+                  <accordion-group [isOpen]="true" heading="Quantities & Cost">
+                    <div
+                      *ngFor="let item of invoiceProductItems; let i = index"
+                    >
+                      <div>
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-sm-2">
+                              <label class="value">{{
+                                item.productId != null
+                                  ? item.productName
+                                  : item.serviceName
+                              }}</label>
+                            </div>
+                            <div class="col-sm-3 d-flex">
+                              <label class="control-label mr-2">
+                                Quantity
+                              </label>
+
+                              <div>
+                                <label class="cotrol-label value amount">
+                                  {{ item.quantity }}
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-sm-3 d-flex">
+                              <label class="control-label mr-2">
+                                {{ invoiceType == 1 ? 'Cost' : 'Price' }}
+                              </label>
+                              <div>
+                                <label class="cotrol-label value amount">
+                                  {{ item.price | number: '1.2-2' }}
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-sm-3 d-flex">
+                              <label class="control-label mr-2"> Total </label>
+                              <label class="control-label value">
+                                {{
+                                  item.quantity * item.price | number: '1.2-2'
+                                }}
+                                L.E
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-8"></div>
+                      <div class="col-sm-3 d-flex">
+                        <label class="control-label mr-2"> Total P/S </label>
+                        <label class="control-label value">
+                          {{ totalInvoiceAmount | number: '1.2-2' }}
+                          L.E
+                        </label>
+                      </div>
+                    </div>
+                  </accordion-group>
+                </accordion>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Tax</label>
+                    <div class="col-sm-2">
+                      <label class="control-label value amount">
+                        {{ invoice.tax }} %
+                      </label>
+                    </div>
+
+                    <div class="col-sm-2 amount">
+                      <label id="" class="control-label value amount">{{
+                        (totalInvoiceAmount * invoice.tax) / 100
+                          | number: '1.2-2'
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Transfer</label>
+                    <div class="col-sm-2">
+                      <label class="control-label value amount">
+                        {{ invoice.transfer }} %
+                      </label>
+                    </div>
+
+                    <div class="col-sm-2 amount">
+                      <label id="" class="control-label value amount">{{
+                        (totalInvoiceAmount * invoice.transfer) / 100
+                          | number: '1.2-2'
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">{{
+                      invoiceType == 1 ? 'Additional Fees' : 'Transportation'
+                    }}</label>
+                    <div class="col-sm-7">
+                      <label class="control-label value">
+                        {{
+                          (invoiceType == 1
+                            ? invoice.additionalFees
+                            : invoice.transportaion
+                          ) | number: '1.2-2'
+                        }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Created By</label>
+                    <div class="col-sm-5">
+                      <label class="control-label value amount">{{
+                        invoice.createdBy
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="invoiceType == 1" class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Attachment</label>
+                    <div class="col-sm-5 file">
+                      <a
+                        *ngIf="invoice.fileName"
+                        (click)="
+                          downloadAttachment(invoice.filePath, invoice.fileName)
+                        "
+                        class="action-button attach"
+                      >
+                        <i class="fa fa-files-o" aria-hidden="true"></i>
+                        {{
+                          invoice.fileName
+                            ? invoice.fileName.replace(
+                                invoice.fileName.substring(
+                                  invoice.fileName.indexOf('_attach'),
+                                  invoice.fileName.lastIndexOf('.')
+                                ),
+                                ''
+                              )
+                            : ''
+                        }}</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Total Invoice</label>
+                    <div class="col-sm-5">
+                      <label
+                        *ngIf="invoiceType == 1"
+                        id=""
+                        class="control-label value amount"
+                        >{{
+                          totalInvoiceAmount +
+                            (totalInvoiceAmount * invoice.tax) / 100 -
+                            (totalInvoiceAmount * invoice.transfer) / 100 +
+                            (invoice.additionalFees != null
+                              ? invoice.additionalFees
+                              : 0) | number: '1.2-2'
+                        }}</label
+                      >
+
+                      <label
+                        *ngIf="invoiceType == 2"
+                        id=""
+                        class="control-label value"
+                        >{{
+                          totalInvoiceAmount +
+                            (totalInvoiceAmount * invoice.tax) / 100 -
+                            (totalInvoiceAmount * invoice.transfer) / 100 +
+                            (invoice.transportaion != null
+                              ? invoice.transportaion
+                              : 0) | number: '1.2-2'
+                        }}</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Creation Date</label>
+                    <div class="col-sm-5">
+                      <label id="" class="control-label value amount">{{
+                        invoice.createDate | date
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <app-payment
+              [payment]="payment"
+              [payments]="invoicePaymentItems"
+            ></app-payment>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #deleteInvoiceTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Delete Invoice</h4>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="deleteinvoicemodalRef.hide()"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h5 class="delete">Are you sure you want to cancel this invoice ?</h5>
+    <button
+      (click)="deleteInvoice(invoice.id)"
+      class="btn btn-primary mb-3 pull-right"
+    >
+      <i class="fa fa-trash"></i>
+      Yes
+    </button>
+  </div>
+</ng-template>
+
+<div id="print-section" class="hidden row">
+  <app-print-invoice [invoice]="invoice"></app-print-invoice>
+</div>

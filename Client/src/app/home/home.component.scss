@@ -1,0 +1,9 @@
+.action-button {
+  margin-right: 10px;
+  color: #007bff !important;
+  cursor: pointer;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}

@@ -1,0 +1,195 @@
+<div class="" id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row row-stat">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading panel-heading-divider">
+            {{ expenseId > 0 ? 'Edit' : 'Add' }} Daily Expenses<span
+              class="panel-subtitle"
+              >Save Daily Expenses information</span
+            >
+          </div>
+          <div class="panel-body">
+            <div class="panel-heading panel-heading-no-divider">
+              <app-section-header></app-section-header>
+            </div>
+
+            <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+              <div class="form-row mb-2">
+                <div class="col-md-2">
+                  <label class="control-label"
+                    >Expense Type<span class="text-danger">*</span></label
+                  >
+                </div>
+                <div class="col-md-4">
+                  <ng-select
+                    [items]="expenseTypes"
+                    bindLabel="name"
+                    appendTo="body"
+                    formControlName="expenseType"
+                  >
+                  </ng-select>
+                  <span
+                    class="text-danger"
+                    *ngIf="
+                      expenseForm.get('expenseType').invalid &&
+                      expenseForm.get('expenseType').touched &&
+                      expenseForm.get('expenseType').errors['required']
+                    "
+                    >Expense Type is required</span
+                  >
+                </div>
+              </div>
+              <div class="form-row mb-3">
+                <div class="col-md-2">
+                  <label class="control-label">Description</label>
+                </div>
+                <div class="col-md-4">
+                  <input
+                    id=""
+                    formControlName="description"
+                    class="form-control"
+                    type="text"
+                  />
+                </div>
+              </div>
+
+              <div class="form-row mb-3">
+                <div class="col-md-2">
+                  <label class="control-label"
+                    >Transaction Date<span class="text-danger">*</span></label
+                  >
+                </div>
+                <div class="col-md-4">
+                  <input
+                    type="text"
+                    class="form-control"
+                    bsDatepicker
+                    formControlName="transactionDate"
+                    [bsConfig]="{
+                      dateInputFormat: 'DD-MM-YYYY',
+                      showClearButton: true,
+                      clearPosition: 'right',
+                      showTodayButton: true,
+                      todayPosition: 'left',
+                      isAnimated: true
+                    }"
+                  />
+                  <span
+                    class="text-danger"
+                    *ngIf="
+                      expenseForm.get('transactionDate').invalid &&
+                      expenseForm.get('transactionDate').touched &&
+                      expenseForm.get('transactionDate').errors['required']
+                    "
+                    >Transaction Date is required</span
+                  >
+                </div>
+              </div>
+
+              <div class="form-row mb-3">
+                <div class="col-md-2">
+                  <label class="control-label"
+                    >Amount<span class="text-danger">*</span></label
+                  >
+                </div>
+                <div class="col-md-4">
+                  <input
+                    id=""
+                    formControlName="amount"
+                    class="form-control"
+                    min="0"
+                    type="number"
+                  />
+                  <span
+                    class="text-danger"
+                    *ngIf="
+                      expenseForm.get('amount').invalid &&
+                      expenseForm.get('amount').touched &&
+                      expenseForm.get('amount').errors['min']
+                    "
+                    >Min value is zero</span
+                  >
+                  <span
+                    class="text-danger"
+                    *ngIf="
+                      expenseForm.get('amount').invalid &&
+                      expenseForm.get('amount').touched &&
+                      expenseForm.get('amount').errors['required']
+                    "
+                    >Amount is required</span
+                  >
+                </div>
+              </div>
+
+              <div class="form-row mb-3">
+                <div class="col-md-2">
+                  <label class="control-label"
+                    >Payment Method<span class="text-danger">*</span></label
+                  >
+                </div>
+                <div class="col-md-4">
+                  <ng-select
+                    [items]="paymentMethod"
+                    bindLabel="name"
+                    appendTo="body"
+                    formControlName="paymentMethod"
+                    (change)="onChangePaymentMethod()"
+                  >
+                  </ng-select>
+                  <span
+                    class="text-danger"
+                    *ngIf="
+                      expenseForm.get('paymentMethod').invalid &&
+                      expenseForm.get('paymentMethod').touched &&
+                      expenseForm.get('paymentMethod').errors['required']
+                    "
+                    >Payment Method is required</span
+                  >
+                </div>
+              </div>
+              <div class="form-row mb-3" *ngIf="isBankOrCheque">
+                <div class="col-md-2">
+                  <label class="control-label"
+                    >{{
+                      expenseForm.controls['paymentMethod'].value.id == 2
+                        ? 'Cheque Number'
+                        : 'Transfer Number'
+                    }}<span class="text-danger">*</span></label
+                  >
+                </div>
+                <div class="col-md-4">
+                  <input
+                    id=""
+                    formControlName="transactionNumber"
+                    class="form-control"
+                    type="text"
+                  />
+                  <span
+                    class="text-danger"
+                    *ngIf="
+                      expenseForm.get('transactionNumber').invalid &&
+                      expenseForm.get('transactionNumber').touched &&
+                      expenseForm.get('transactionNumber').errors['required']
+                    "
+                    >Cheque/ Bank Transfer Number is required</span
+                  >
+                </div>
+              </div>
+
+              <div class="form-row mb-3">
+                <button
+                  type="submit"
+                  id="Save"
+                  class="btn btn-primary pull-right"
+                >
+                  <i class="fa fa-save"> Save</i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

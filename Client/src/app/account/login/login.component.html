@@ -1,0 +1,91 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div class="login-wrap">
+    <div class="login-html">
+      <input id="tab-1" type="radio" name="tab" class="sign-in" checked /><label
+        for="tab-1"
+        class="tab"
+        >Sign In</label
+      >
+      <input
+        id="tab-2"
+        type="radio"
+        style="display: none"
+        name="tab"
+        class="sign-up"
+      /><label for="tab-2" class="tab"></label>
+      <div class="login-form">
+        <div class="sign-in-htm">
+          <div class="group">
+            <label for="user" class="label"
+              >Email<span class="text-light">*</span></label
+            >
+            <input
+              formControlName="email"
+              type="email"
+              class="form-control"
+              placeholder="Email address"
+              id="email"
+              class="input"
+            />
+            <span
+              class="text-light"
+              *ngIf="
+                loginForm.get('email').invalid &&
+                loginForm.get('email').touched &&
+                loginForm.get('email').errors['required']
+              "
+              >Email adress is required</span
+            >
+            <span
+              class="text-light"
+              *ngIf="
+                loginForm.get('email').invalid &&
+                loginForm.get('email').touched &&
+                loginForm.get('email').errors['pattern']
+              "
+              >Email adress is not valid</span
+            >
+          </div>
+          <div class="group">
+            <label for="pass" class="label"
+              >Password<span class="text-light">*</span></label
+            >
+            <input
+              id="pass"
+              formControlName="password"
+              type="password"
+              class="form-control"
+              placeholder="Password"
+              type="password"
+              class="input"
+              data-type="password"
+            />
+            <span
+              class="text-light"
+              *ngIf="
+                loginForm.get('password').invalid &&
+                loginForm.get('password').touched &&
+                loginForm.get('password').errors['required']
+              "
+              >Password is required</span
+            >
+          </div>
+          <div class="group">
+            <input type="submit" class="button" value="Sign In" />
+          </div>
+
+          <div class="group">
+            <a
+              class="forget"
+              [routerLink]="['/users/reset-password']"
+              [routerLinkActive]="['active']"
+              [routerLinkActiveOptions]="{ exact: true }"
+              >Forget Password ?</a
+            >
+          </div>
+          <div class="hr"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

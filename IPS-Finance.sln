@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{CAD2897D-4968-4540-AEE5-B455CF593D7D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{7070DCFC-E7E6-43DB-AFA3-9EA31609250F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{AD654475-FCD5-41F2-AC05-B081171B726D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAD2897D-4968-4540-AEE5-B455CF593D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD2897D-4968-4540-AEE5-B455CF593D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD2897D-4968-4540-AEE5-B455CF593D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD2897D-4968-4540-AEE5-B455CF593D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7070DCFC-E7E6-43DB-AFA3-9EA31609250F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7070DCFC-E7E6-43DB-AFA3-9EA31609250F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7070DCFC-E7E6-43DB-AFA3-9EA31609250F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7070DCFC-E7E6-43DB-AFA3-9EA31609250F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD654475-FCD5-41F2-AC05-B081171B726D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD654475-FCD5-41F2-AC05-B081171B726D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD654475-FCD5-41F2-AC05-B081171B726D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD654475-FCD5-41F2-AC05-B081171B726D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7A2EDCCC-F123-4467-85EC-7E8878B7EDD9}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://dev.azure.com/moustafaabdelwahab
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = API\\API.csproj
+		SccProjectName1 = API
+		SccLocalPath1 = API
+		SccProjectUniqueName2 = Core\\Core.csproj
+		SccProjectName2 = Core
+		SccLocalPath2 = Core
+		SccProjectUniqueName3 = Infrastructure\\Infrastructure.csproj
+		SccProjectName3 = Infrastructure
+		SccLocalPath3 = Infrastructure
+	EndGlobalSection
+EndGlobal

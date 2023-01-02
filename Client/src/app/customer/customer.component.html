@@ -1,0 +1,273 @@
+<div class="" id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row row-stat">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default panel-flat">
+              <div class="panel-heading panel-heading-divider">
+                {{ customerType == 1 ? 'Clients' : 'Suppliers' }}
+                List<span class="panel-subtitle"
+                  >These are list of
+                  {{ customerType == 1 ? 'Clients' : 'Suppliers' }} with
+                  Reporting
+                </span>
+              </div>
+              <div class="panel-body">
+                <div class="panel-heading panel-heading-no-divider">
+                  <app-section-header></app-section-header>
+                </div>
+                <div class="table-responsive">
+                  <div class="col-md-12 form-inline md-form form-sm mt-1">
+                    <div class="row g-4 md-form">
+                      <div class="col-auto">
+                        <input
+                          type="text"
+                          placeholder="Create Date From"
+                          class="form-control"
+                          bsDatepicker
+                          #fromDate
+                          [bsConfig]="{
+                            dateInputFormat: 'DD-MM-YYYY',
+                            showClearButton: true,
+                            clearPosition: 'right',
+                            showTodayButton: true,
+                            todayPosition: 'left'
+                          }"
+                          [bsConfig]="{ isAnimated: true }"
+                        />
+                      </div>
+                      <div class="col-auto">
+                        <input
+                          type="text"
+                          placeholder="Create Date To"
+                          class="form-control"
+                          bsDatepicker
+                          #toDate
+                          [bsConfig]="{
+                            dateInputFormat: 'DD-MM-YYYY',
+                            showClearButton: true,
+                            clearPosition: 'right',
+                            showTodayButton: true,
+                            todayPosition: 'left'
+                          }"
+                          [bsConfig]="{ isAnimated: true }"
+                        />
+                      </div>
+                      <div class="col-auto">
+                        <input
+                          type="text"
+                          placeholder="Invoice Date From"
+                          class="form-control"
+                          bsDatepicker
+                          #invoiceFromDate
+                          [bsConfig]="{
+                            dateInputFormat: 'DD-MM-YYYY',
+                            showClearButton: true,
+                            clearPosition: 'right',
+                            showTodayButton: true,
+                            todayPosition: 'left'
+                          }"
+                          [bsConfig]="{ isAnimated: true }"
+                        />
+                      </div>
+                      <div class="col-auto">
+                        <input
+                          type="text"
+                          placeholder="Invoice Date To"
+                          class="form-control"
+                          bsDatepicker
+                          #invoiceToDate
+                          [bsConfig]="{
+                            dateInputFormat: 'DD-MM-YYYY',
+                            showClearButton: true,
+                            clearPosition: 'right',
+                            showTodayButton: true,
+                            todayPosition: 'left'
+                          }"
+                          [bsConfig]="{ isAnimated: true }"
+                        />
+                      </div>
+
+                      <div class="col-auto">
+                        <button
+                          (click)="onFilter()"
+                          class="btn btn-primary mb-3"
+                        >
+                          <i class="fa fa-filter"></i> Filter
+                        </button>
+                      </div>
+
+                      <div class="col-auto mt-2">
+                        <a
+                          *hasClaim="[
+                            'Clients:Add Client',
+                            'Suppliers:Add Supplier'
+                          ]"
+                          routerLink="/{{
+                            customerType == 1 ? 'client' : 'supplier'
+                          }}/add"
+                          class="action-button"
+                        >
+                          <i class="fa fa-plus"></i> Add New
+                          {{ customerType == 1 ? 'Client' : 'Supplier' }}</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <div class="col-md-12 form-inline md-form form-sm mt-1">
+                    <div class="row g-4 md-form">
+                      <div class="col-auto">
+                        <i class="fa fa-search active" aria-hidden="true"></i>
+                        <input
+                          *ngIf="customers"
+                          (keyup)="onSearch()"
+                          class="
+                            form-control
+                            searchbox
+                            form-control-sm
+                            ml-3
+                            w-75
+                          "
+                          type="text"
+                          placeholder="Search"
+                          aria-label="Search"
+                          #search
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <br />
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>Address</th>
+                        <th>Tax Reference Number</th>
+                        <th>Representative Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Created By</th>
+                        <th>Creation Date</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of customers">
+                        <td>
+                          {{ item.id }}
+                        </td>
+                        <td>
+                          {{ item.name }}
+                        </td>
+                        <td>
+                          {{ item.city }}
+                        </td>
+                        <td>
+                          {{ item.address }}
+                        </td>
+                        <td>{{ item.taxReferenceNumber }}</td>
+                        <td>{{ item.representativeName }}</td>
+                        <td>{{ item.email }}</td>
+                        <td>{{ item.mobileNumber }}</td>
+                        <td>{{ item.createdBy }}</td>
+                        <td>{{ item.createDate | date }}</td>
+                        <td>
+                          <a
+                            *hasClaim="[
+                              'Clients:Delete Client',
+                              'Suppliers:Delete Supplier'
+                            ]"
+                            (click)="openDeleteModal(deletetemplate)"
+                            class="action-button"
+                          >
+                            <i class="fa fa-trash"></i
+                          ></a>
+
+                          <ng-template #deletetemplate>
+                            <div class="modal-header">
+                              <h4 class="modal-title pull-left">
+                                Delete
+                                {{ customerType == 1 ? 'Client' : 'Supplier' }}
+                              </h4>
+                              <button
+                                type="button"
+                                class="close pull-right"
+                                aria-label="Close"
+                                (click)="deletemodalRef.hide()"
+                              >
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <h5 class="delete">
+                                Are you sure you want to delete this
+                                {{ customerType == 1 ? 'client' : 'supplier' }}
+                                ?
+                              </h5>
+                              <button
+                                (click)="deleteCustomer(item.id)"
+                                class="btn btn-primary mb-3 pull-right"
+                              >
+                                <i class="fa fa-trash"></i>
+                                Yes
+                              </button>
+                            </div>
+                          </ng-template>
+
+                          <span *hasClaim="'Clients:Add Client'">
+                            <a
+                              [routerLink]="['/client/edit/' + item.id]"
+                              *ngIf="customerType == 1"
+                              class="action-button"
+                            >
+                              <i class="fa fa-edit"></i
+                            ></a>
+                          </span>
+
+                          <span *hasClaim="'Suppliers:Add Supplier'">
+                            <a
+                              [routerLink]="['/supplier/edit/' + item.id]"
+                              *ngIf="customerType == 2"
+                              class="action-button"
+                            >
+                              <i class="fa fa-edit"></i
+                            ></a>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="row m-2 pull-right">
+                    <button (click)="Export()" class="btn btn-primary">
+                      <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                      Export
+                    </button>
+                  </div>
+                </div>
+                <div class="xs-mb-50 xs-mt-40 pull-right">
+                  <app-pager
+                    [pageSize]="customerParams.pageSize"
+                    [totalCount]="totalCount"
+                    (pageChanged)="onPageChanged($event)"
+                  ></app-pager>
+                </div>
+                <div class="xs-mb-50 xs-mt-40 pull-left">
+                  <app-paging-header
+                    [pageNumber]="this.customerParams.pageNumber"
+                    [pageSize]="this.customerParams.pageSize"
+                    [totalCount]="totalCount"
+                  ></app-paging-header>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

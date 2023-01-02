@@ -1,0 +1,50 @@
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css";
+@import "../node_modules/bootswatch/dist/united/bootstrap.min.css";
+@import "../node_modules/font-awesome/css/font-awesome.min.css";
+@import"../node_modules/ngx-toastr/toastr.css";
+
+/* You can add global styles to this file, and also import other style files */
+ .xng-breadcrumb-root{
+     padding: 8px 16px;
+     display: inline;
+     border-radius: 0;
+ }
+ label.xng-breadcrumb-trail{
+     margin-bottom: 0;
+     color: #1f6b9e;
+     font-weight: bold;
+ }
+  label.xng-breadcrumb-separator{
+     padding:  0 0;
+ }
+ .bs-datepicker-head,
+ .bs-datepicker-head, .bs-datepicker button:active,
+ .bs-datepicker-body table td span.selected,
+ .bs-datepicker-body table td.selected span,
+ .bs-datepicker-body table td span[class*="select-"]:after,
+ .bs-datepicker-body table td[class*="select-"] span:after,
+ .bs-datepicker-body table td.active-week span:hover 
+ {
+   background-color: #1f6b9e !important; 
+ }
+ 
+ .bs-datepicker-body table td.week span 
+ {
+   color: #1f6b9e !important; 
+ }
+ .control-label{
+
+  font-weight: bold;
+  white-space: nowrap;
+ }
+
+ @import 'scss/variables'; 
+@import '../node_modules/bootstrap/scss/bootstrap';
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import 'scss/custom'; 
+@import 'scss/responsive'; 
+@import "~@ng-select/ng-select/themes/default.theme.css";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -1,0 +1,340 @@
+<div class="" id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row row-stat">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default panel-flat">
+              <div class="panel-heading panel-heading-divider">
+                {{ invoiceType == 1 ? 'Purchasing' : 'Sales' }} Invoices
+                List<span class="panel-subtitle"
+                  >These are list of
+                  {{ invoiceType == 1 ? 'Purchase' : 'Sales' }} Invoices with
+                  Reporting
+                </span>
+              </div>
+              <div class="panel-body">
+                <div class="panel-heading panel-heading-no-divider">
+                  <app-section-header></app-section-header>
+                </div>
+
+                <div class="table-responsive">
+                  <div class="col-md-12 form-inline md-form form-sm mt-1">
+                    <div class="row g-4 md-form">
+                      <div class="col-auto">
+                        <i class="fa fa-search active" aria-hidden="true"></i>
+                        <input
+                          *ngIf="invoices"
+                          (keyup)="onSearch()"
+                          class="
+                            form-control
+                            searchbox
+                            form-control-sm
+                            ml-3
+                            w-75
+                          "
+                          type="text"
+                          placeholder="Search"
+                          aria-label="Search"
+                          #search
+                        />
+                      </div>
+                      <div class="col-auto">
+                        <input
+                          type="text"
+                          placeholder="Invoice Date From"
+                          class="form-control"
+                          bsDatepicker
+                          #fromDate
+                          [bsConfig]="{
+                            dateInputFormat: 'DD-MM-YYYY',
+                            showClearButton: true,
+                            clearPosition: 'right',
+                            showTodayButton: true,
+                            todayPosition: 'left'
+                          }"
+                          [bsConfig]="{ isAnimated: true }"
+                        />
+                      </div>
+                      <div class="col-auto">
+                        <input
+                          type="text"
+                          placeholder="Invoice Date To"
+                          class="form-control"
+                          bsDatepicker
+                          #toDate
+                          [bsConfig]="{
+                            dateInputFormat: 'DD-MM-YYYY',
+                            showClearButton: true,
+                            clearPosition: 'right',
+                            showTodayButton: true,
+                            todayPosition: 'left'
+                          }"
+                          [bsConfig]="{ isAnimated: true }"
+                        />
+                      </div>
+                      <div class="col-auto">
+                        <button
+                          (click)="onFilter()"
+                          class="btn btn-primary mb-3"
+                        >
+                          <i class="fa fa-filter"></i> Filter
+                        </button>
+                      </div>
+                      <div class="col-auto"></div>
+                      <div class="col-auto"></div>
+                      <div class="col-auto"></div>
+                      <div class="col-auto"></div>
+
+                      <div class="col-auto mt-2">
+                        <a
+                          *hasClaim="[
+                            'Purchasing:Add Purchasing Invoice',
+                            'Sales:Add Sales Invoice'
+                          ]"
+                          routerLink="/{{
+                            invoiceType == 1
+                              ? 'purchase-invoice'
+                              : 'sales-invoice'
+                          }}/add"
+                          class="action-button"
+                        >
+                          <i class="fa fa-plus"></i> Add New Invoice</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Invoice Number</th>
+                        <th>{{ invoiceType == 1 ? 'Supplier' : 'Client' }}</th>
+                        <th>Invoice Date</th>
+                        <th *ngIf="invoiceType == 2">Broker Name</th>
+                        <th>Total Invoice</th>
+                        <th *ngIf="invoiceType == 1">Total Paid</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of invoices">
+                        <td>
+                          {{
+                            invoiceType == 1
+                              ? item.purchaseInvoiceNumber
+                              : item.salesInvoiceNumber
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            invoiceType == 1
+                              ? item.supplierName
+                              : item.clientName
+                          }}
+                        </td>
+                        <td>
+                          {{ item.invoiceDate | date }}
+                        </td>
+                        <td *ngIf="invoiceType == 2">
+                          {{ item.brokerName }}
+                        </td>
+                        <td>{{ item.totalInvoice | number: '1.2-2' }}</td>
+                        <td *ngIf="invoiceType == 1">
+                          {{ item.totalPaid | number: '1.2-2' }}
+                        </td>
+                        <td>
+                          <span
+                            *ngIf="!item.deleted"
+                            class="badge badge-success"
+                            >Active</span
+                          >
+                          <span *ngIf="item.deleted" class="badge badge-danger"
+                            >Cancelled</span
+                          >
+                          <span *ngIf="item.isTax" class="badge badge-info">
+                            ضريبية
+                          </span>
+                          <span *ngIf="!item.isTax" class="badge badge-warning">
+                            غير ضريبية
+                          </span>
+                        </td>
+                        <td class="action">
+                          <span>
+                            <a
+                              routerLink="/{{
+                                invoiceType == 1
+                                  ? 'purchase-invoice'
+                                  : 'sales-invoice'
+                              }}/view/{{ item.id }}"
+                              class="action-button"
+                            >
+                              <i class="fa fa-eye"></i
+                            ></a>
+                          </span>
+                          &nbsp;
+
+                          <span
+                            *hasClaim="'Purchasing:Edit Purchasing Invoice'"
+                          >
+                            <a
+                              [routerLink]="[
+                                '/purchase-invoice/edit/' + item.id
+                              ]"
+                              *ngIf="
+                                !item.deleted &&
+                                invoiceType == 1 &&
+                                item.invoicePayments.length == 0
+                              "
+                              class="action-button"
+                            >
+                              <i class="fa fa-edit"></i
+                            ></a>
+                          </span>
+                          <span *hasClaim="'Sales:Edit Sales Invoice'">
+                            <a
+                              [routerLink]="['/sales-invoice/edit/' + item.id]"
+                              *ngIf="
+                                !item.deleted &&
+                                invoiceType == 2 &&
+                                item.invoicePayments.length == 0
+                              "
+                              class="action-button"
+                            >
+                              <i class="fa fa-edit"></i
+                            ></a>
+                          </span>
+                          &nbsp;
+
+                          <span
+                            *hasClaim="[
+                              'Purchasing:Cancel Purchasing Invoice',
+                              'Sales:Cancel Sales Invoice'
+                            ]"
+                          >
+                            <a
+                              *ngIf="!item.deleted && item.totalPaid == 0"
+                              (click)="openDeleteModal(deletetemplate)"
+                              class="action-button"
+                            >
+                              <i class="fa fa-ban"></i>
+                            </a>
+                          </span>
+                          &nbsp;
+
+                          <span
+                            *hasClaim="[
+                              'Purchasing:Add Purchasing Invoice Payment',
+                              'Sales:Add Sales Invoice Payment',
+                              'Purchasing:Edit Purchasing Invoice Payment',
+                              'Sales:Edit Sales Invoice Payment'
+                            ]"
+                          >
+                            <a
+                              *ngIf="
+                                item.totalInvoice - item.totalPaid > 0 &&
+                                !item.deleted
+                              "
+                              (click)="
+                                openModal(
+                                  template,
+                                  item.totalInvoice - item.totalPaid,
+                                  item.invoiceDate,
+                                  item.id
+                                )
+                              "
+                              class="action-button"
+                            >
+                              <i class="fa fa-money" aria-hidden="true"></i>
+                            </a>
+                          </span>
+
+                          <ng-template #deletetemplate>
+                            <div class="modal-header">
+                              <h4 class="modal-title pull-left">
+                                delete Invoice
+                              </h4>
+                              <button
+                                type="button"
+                                class="close pull-right"
+                                aria-label="Close"
+                                (click)="deletemodalRef.hide()"
+                              >
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <h5 class="delete">
+                                Are you sure you want to cancel this invoice ?
+                              </h5>
+                              <button
+                                (click)="deleteInvoice(item.id)"
+                                class="btn btn-primary mb-3 pull-right"
+                              >
+                                <i class="fa fa-trash"></i>
+                                Yes
+                              </button>
+                            </div>
+                          </ng-template>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="col-md-6 m-2 pull-right">
+                    <button
+                      (click)="GenerateReport()"
+                      class="btn btn-primary report"
+                    >
+                      <i class="fa fa-download" aria-hidden="true"></i> Generate
+                      {{ invoiceType == 1 ? 'Purchasing' : 'Sales' }} Report
+                    </button>
+
+                    <button (click)="Export()" class="btn btn-primary">
+                      <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                      Export
+                    </button>
+                  </div>
+                </div>
+                <div class="xs-mb-50 xs-mt-40 pull-right">
+                  <app-pager
+                    [pageSize]="invoiceParams.pageSize"
+                    [totalCount]="totalCount"
+                    (pageChanged)="onPageChanged($event)"
+                  ></app-pager>
+                </div>
+                <div class="xs-mb-50 xs-mt-40 pull-left">
+                  <app-paging-header
+                    [pageNumber]="this.invoiceParams.pageNumber"
+                    [pageSize]="this.invoiceParams.pageSize"
+                    [totalCount]="totalCount"
+                  ></app-paging-header>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Payment</h4>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-payment-editor
+      [payment]="payment"
+      [modalRef]="modalRef"
+    ></app-payment-editor>
+  </div>
+</ng-template>

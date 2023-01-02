@@ -1,0 +1,50 @@
+.value {
+  color: #1f6b9e;
+  font-weight: bold;
+}
+.perc {
+  font-weight: bold;
+  padding-top: 10px;
+}
+.amount {
+  font-weight: bold;
+
+  padding-top: 5px;
+}
+.badge {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.action-button {
+  margin-right: 10px;
+  color: #007bff !important;
+  cursor: pointer;
+  font-size: 20px;
+  &:last-child {
+    margin-right: 0;
+  }
+}
+.actions {
+  padding-left: 60px;
+}
+.delete {
+  color: #007bff !important;
+}
+.attach {
+  font-size: larger;
+}
+.file {
+  margin-top: 3px;
+}
+#print-section {
+  display: none;
+}
+.print {
+  background: none;
+  border: none;
+}
+
+.badge {
+  margin-left: 10px;
+}

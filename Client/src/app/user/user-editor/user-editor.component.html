@@ -1,0 +1,187 @@
+<div class="" id="page-wrapper">
+    <div class="container-fluid">
+      <div class="row row-stat">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading panel-heading-divider">
+              {{ userId > 0 ? 'Edit' : 'Add' }}
+               User
+              <span class="panel-subtitle"
+                >Save
+                User information</span
+              >
+            </div>
+            <div class="panel-body">
+              <div class="panel-heading panel-heading-no-divider">
+                <app-section-header></app-section-header>
+              </div>
+              <form
+                class="row form-horizontal"
+                [formGroup]="userForm"
+                (ngSubmit)="onSubmit()"
+              >
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="row">
+                      <label class="col-sm-3 control-label"
+                        >
+                       First Name<span class="text-danger">*</span></label
+                      >
+                      <div class="col-sm-7">
+                        <input
+                          id="Name"
+                          autocomplete="off"
+                          class="form-control"
+                          formControlName="firstName"
+                          type="text"
+                        />
+                        <span
+                          class="text-danger"
+                          *ngIf="
+                            userForm.get('firstName').invalid &&
+                            userForm.get('firstName').touched &&
+                            userForm.get('firstName').errors['required']
+                          "
+                          >First name is required</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label class="col-sm-3 control-label"
+                        >
+                       Last Name<span class="text-danger">*</span></label
+                      >
+                      <div class="col-sm-7">
+                        <input
+                          id="Name"
+                          autocomplete="off"
+                          class="form-control"
+                          formControlName="lastName"
+                          type="text"
+                        />
+                        <span
+                          class="text-danger"
+                          *ngIf="
+                            userForm.get('lastName').invalid &&
+                            userForm.get('lastName').touched &&
+                            userForm.get('lastName').errors['required']
+                          "
+                          >Last name is required</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label class="col-sm-3 control-label"
+                        >Permissions<span class="text-danger">*</span></label
+                      >
+                      <div class="col-sm-7">
+                        <ng-select
+                          [items]="selectedClaims"
+                          bindLabel="displayName"
+                          appendTo="body"
+                          formControlName="claims"
+                          multiple="true"
+                        >
+                        </ng-select>
+                        <span
+                          class="text-danger"
+                          *ngIf="
+                            userForm.get('claims').invalid &&
+                            userForm.get('claims').touched &&
+                            userForm.get('claims').errors['required']
+                          "
+                          >Permissions is required</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                
+                </div>
+                <div class="col-md-6">
+               
+                    <div class="form-group">
+                        <div class="row">
+                          <label class="col-sm-3 control-label"
+                            >Email<span class="text-danger">*</span></label
+                          >
+                          <div class="col-sm-7">
+                            <input
+                              id="Name"
+                              autocomplete="off"
+                              class="form-control"
+                              formControlName="email"
+                              type="text"
+                            />
+                            <span
+                              class="text-danger"
+                              *ngIf="
+                                userForm.get('email').invalid &&
+                                userForm.get('email').touched &&
+                                userForm.get('email').errors['required']
+                              "
+                              >Email is required</span
+                            >
+                            <span
+                              class="text-danger"
+                              *ngIf="
+                                userForm.get('email').invalid &&
+                                userForm.get('email').touched &&
+                                userForm.get('email').errors['pattern']
+                              "
+                              >Email is not valid</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="row">
+                          <label class="col-sm-3 control-label"
+                            >Roles<span class="text-danger">*</span></label
+                          >
+                          <div class="col-sm-7">
+                            <ng-select
+                              [items]="rolesEditor"
+                              bindLabel="displayName"
+                              appendTo="body"
+                              formControlName="roles"
+                              multiple="true"
+                              (change)="GetClaims($event)"
+                            >
+                            </ng-select>
+                            <span
+                              class="text-danger"
+                              *ngIf="
+                                userForm.get('roles').invalid &&
+                                userForm.get('roles').touched &&
+                                userForm.get('roles').errors['required']
+                              "
+                              >Roles is required</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                </div>
+
+               
+  
+                <div class="col-md-11">
+                  <button
+                    type="submit"
+                    id="Save"
+                    class="btn btn-primary pull-right"
+                  >
+                    <i class="fa fa-save"> Save</i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,242 @@
+<div class="" id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row row-stat">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default panel-flat">
+              <br />
+              <div class="row">
+                <div class="col-md-6" *ngIf="credit">
+                  <div>
+                    <label class="credit" for="">Overall Bank Credit :</label>
+                    <span class="cr">{{ credit.bankCredit }} L.E</span>
+                  </div>
+                  <div>
+                    <label class="credit" for="">Overall Cash Credit :</label>
+                    <span class="cr">{{ credit.cashCredit }} L.E</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <a routerLink="/transaction/edit" class="action-button">
+                    <i class="fa fa-edit"></i> Update Overall Credit</a
+                  >
+                </div>
+              </div>
+              <br />
+              <br />
+              <div *hasClaim="'Transaction:List/View Transactions'" class="row">
+                <div class="col-md-12">
+                  <div class="table-responsive">
+                    <div class="col-md-12 form-inline md-form form-sm mt-1">
+                      <div class="row g-12 md-form">
+                        <h5>
+                          <i
+                            class="fa fa-credit-card-alt"
+                            aria-hidden="true"
+                          ></i>
+                          Bank
+                        </h5>
+                      </div>
+                    </div>
+                    <br />
+                    <br />
+                  </div>
+                  <table *ngIf="bankTransactions" class="table">
+                    <thead>
+                      <tr>
+                        <th>Payment ID</th>
+                        <th>Type</th>
+                        <th>Invoice ID</th>
+                        <th>Invoice Number</th>
+                        <th>Broker Name</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Credit</th>
+                        <th>Debit</th>
+                        <th>Current</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of bankTransactions">
+                        <td>
+                          {{ item.paymentId }}
+                        </td>
+                        <td>
+                          {{ item.type }}
+                        </td>
+                        <td>
+                          <a
+                            *ngIf="item.type != 'Expenses'"
+                            routerLink="/purchase-invoice/view/{{
+                              item.invoiceId
+                            }}"
+                            class="action-button"
+                          >
+                            {{ item.invoiceId }}</a
+                          >
+
+                          <a
+                            *ngIf="item.type == 'Expenses'"
+                            routerLink="/expenses/edit/{{ item.invoiceId }}"
+                            class="action-button"
+                          >
+                            {{ item.invoiceId }}</a
+                          >
+                        </td>
+                        <td>
+                          {{ item.invoiceNumber }}
+                        </td>
+                        <td>
+                          {{ item.brokerName }}
+                        </td>
+                        <td>{{ item.description }}</td>
+
+                        <td>{{ item.date | date }}</td>
+                        <td>{{ item.credit | number: '1.1-5' }}</td>
+                        <td>{{ item.debit | number: '1.1-5' }}</td>
+                        <td>{{ item.current | number: '1.1-5' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div
+                    *ngIf="bankTransactions"
+                    class="row m-2 pull-right"
+                  ></div>
+
+                  <div
+                    *ngIf="bankTransactions"
+                    class="xs-mb-50 xs-mt-50 xs-mr-40 pull-left"
+                  >
+                    <app-paging-header
+                      [pageNumber]="this.latestBankTransactionParams.pageNumber"
+                      [pageSize]="this.latestBankTransactionParams.pageSize"
+                      [totalCount]="totalBankCount"
+                    ></app-paging-header>
+                  </div>
+                  <div
+                    *ngIf="bankTransactions"
+                    class="xs-mb-50 xs-mt-40 xs-ml-40 pull-right"
+                  >
+                    <app-pager
+                      [pageSize]="latestBankTransactionParams.pageSize"
+                      [totalCount]="totalBankCount"
+                      (pageChanged)="onBankPageChanged($event)"
+                    ></app-pager>
+                  </div>
+                </div>
+              </div>
+
+              <br />
+              <br />
+              <div *hasClaim="'Transaction:List/View Transactions'" class="row">
+                <div class="col-md-12">
+                  <div class="table-responsive">
+                    <div class="col-md-12 form-inline md-form form-sm mt-1">
+                      <div class="row g-12 md-form">
+                        <h5>
+                          <i class="fa fa-money" aria-hidden="true"></i> Cash
+                          Safe
+                        </h5>
+                      </div>
+                    </div>
+                    <br />
+                    <br />
+                  </div>
+                  <table *ngIf="cashTransactions" class="table">
+                    <thead>
+                      <tr>
+                        <th>Payment ID</th>
+                        <th>Type</th>
+                        <th>Invoice ID</th>
+                        <th>Invoice Number</th>
+                        <th>Broker Name</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Credit</th>
+                        <th>Debit</th>
+                        <th>Current</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of cashTransactions">
+                        <td>
+                          {{ item.paymentId }}
+                        </td>
+                        <td>
+                          {{ item.type }}
+                        </td>
+                        <td>
+                          <a
+                            *ngIf="item.type != 'Expenses'"
+                            routerLink="/purchase-invoice/view/{{
+                              item.invoiceId
+                            }}"
+                            class="action-button"
+                          >
+                            {{ item.invoiceId }}</a
+                          >
+
+                          <a
+                            *ngIf="item.type == 'Expenses'"
+                            routerLink="/expenses/edit/{{ item.invoiceId }}"
+                            class="action-button"
+                          >
+                            {{ item.invoiceId }}</a
+                          >
+                        </td>
+                        <td>
+                          {{
+                            item.type == 'Purchasing'
+                              ? item.purchaseInvoiceNumber
+                              : item.type == 'Sales'
+                              ? item.SalesInvoiceNumber
+                              : null
+                          }}
+                        </td>
+                        <td>
+                          {{ item.brokerName }}
+                        </td>
+                        <td>{{ item.description }}</td>
+
+                        <td>{{ item.date | date }}</td>
+                        <td>{{ item.credit | number: '1.1-5' }}</td>
+                        <td>{{ item.debit | number: '1.1-5' }}</td>
+                        <td>{{ item.current | number: '1.1-5' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div
+                    *ngIf="cashTransactions"
+                    class="row m-2 pull-right"
+                  ></div>
+
+                  <div
+                    *ngIf="cashTransactions"
+                    class="xs-mb-50 xs-mt-40 xs-ml-40 pull-left"
+                  >
+                    <app-paging-header
+                      [pageNumber]="this.latestCashTransactionParams.pageNumber"
+                      [pageSize]="this.latestCashTransactionParams.pageSize"
+                      [totalCount]="totalCashCount"
+                    ></app-paging-header>
+                  </div>
+                  <div
+                    *ngIf="cashTransactions"
+                    class="xs-mb-50 xs-mt-40 xs-ml-40 pull-right"
+                  >
+                    <app-pager
+                      [pageSize]="latestCashTransactionParams.pageSize"
+                      [totalCount]="totalCashCount"
+                      (pageChanged)="onCashPageChanged($event)"
+                    ></app-pager>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

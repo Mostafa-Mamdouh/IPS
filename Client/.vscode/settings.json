@@ -1,0 +1,11 @@
+{
+    "prettier.jsxSingleQuote": true,
+    "prettier.singleQuote": true,
+    "typescript.preferences.quoteStyle": "single",
+    "javascript.preferences.quoteStyle": "single",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "appService.defaultWebAppToDeploy": "/subscriptions/56fc1781-8c81-40d7-8bde-72b153eb041d/resourceGroups/MostafaGroup/providers/Microsoft.Web/sites/IBS-Financial",
+    "appService.deploySubpath": ".",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+}

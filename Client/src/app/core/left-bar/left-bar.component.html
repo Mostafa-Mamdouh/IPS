@@ -1,0 +1,125 @@
+<ng-container *ngIf="currentUser$ | async as user">
+  <div class="sidebar hidden-sm-down">
+    <ul class="nav in" id="side-menu">
+      <!-- <li class="sidebar-search hidden-sm hidden-md hidden-lg"></li> -->
+      <li class="user-pro">
+        <a href="#" class="text-center">
+          <div class="profile-img">
+            <img src="assets/images/IBS.jpg" />
+          </div>
+          <span>{{ (currentUser$ | async).displayName }}</span>
+          <!-- <small class="text-center">Senior Developer</small> -->
+        </a>
+      </li>
+      <li>
+        <a
+          [routerLink]="['/']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="waves-effect"
+          ><i class="fa fa-home"></i>
+          <span class="hide-menu">Dashboard</span></a
+        >
+      </li>
+      <li>
+        <a
+          *hasClaim="'Transaction:List/View Transactions'"
+          [routerLink]="['/transaction']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="waves-effect"
+          ><i class="fa fa-line-chart" aria-hidden="true"></i>
+          <span class="hide-menu">Transaction</span></a
+        >
+      </li>
+      <li>
+        <a
+          *hasClaim="'Users:List/View Users'"
+          [routerLink]="['/users']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="fa fa-id-card-o" aria-hidden="true"></i>
+          <span class="hide-menu">Users</span>
+        </a>
+      </li>
+      <li>
+        <a
+          [routerLink]="['/client']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+          *hasClaim="'Clients:List/View Clients'"
+        >
+          <i class="fa fa-users" aria-hidden="true"></i>
+          <span class="hide-menu">Clients</span>
+        </a>
+      </li>
+      <li>
+        <a
+          *hasClaim="'Suppliers:List/View Suppliers'"
+          [routerLink]="['/supplier']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="fa fa-user-o" aria-hidden="true"></i>
+          <span class="hide-menu">Supliers</span>
+        </a>
+      </li>
+      <li>
+        <a
+          *hasClaim="'Inventory:List/View Products'"
+          [routerLink]="['/product']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="fa fa-gg" aria-hidden="true"></i>
+          <span class="hide-menu">Products</span>
+        </a>
+      </li>
+      <li>
+        <a
+          *hasClaim="'Inventory:List/View Services'"
+          [routerLink]="['/service']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="fa fa-cogs" aria-hidden="true"></i>
+          <span class="hide-menu">Services</span>
+        </a>
+      </li>
+      <li>
+        <a
+          *hasClaim="'Expenses:List/View Expenses'"
+          [routerLink]="['/expenses']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="fa fa-sitemap" aria-hidden="true"></i>
+          <span class="hide-menu">Expenses</span>
+        </a>
+      </li>
+      <li>
+        <a
+          *hasClaim="'Purchasing:List/View Purchasing Invoices'"
+          [routerLink]="['/purchase-invoice']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+          <span class="hide-menu">Purchase Invoices</span>
+        </a>
+      </li>
+      <li>
+        <a
+          *hasClaim="'Sales:List/View Sales Invoices'"
+          [routerLink]="['/sales-invoice']"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="fa fa-calculator" aria-hidden="true"></i>
+          <span class="hide-menu">Sales Invoices</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</ng-container>

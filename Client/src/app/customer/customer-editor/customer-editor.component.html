@@ -1,0 +1,254 @@
+<div class="" id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row row-stat">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading panel-heading-divider">
+            {{ customerId > 0 ? 'Edit' : 'Add' }}
+            {{ customerType == 1 ? 'Client' : 'Supplier'
+            }}<span class="panel-subtitle"
+              >Save
+              {{ customerType == 1 ? 'Product' : 'Service' }} information</span
+            >
+          </div>
+          <div class="panel-body">
+            <div class="panel-heading panel-heading-no-divider">
+              <app-section-header></app-section-header>
+            </div>
+            <form
+              class="row form-horizontal"
+              [formGroup]="customerForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >{{
+                        customerType == 1 ? 'Company' : 'Supplier'
+                      }}
+                      Name<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-7">
+                      <input
+                        id="Name"
+                        autocomplete="off"
+                        class="form-control"
+                        formControlName="name"
+                        type="text"
+                      />
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          customerForm.get('name').invalid &&
+                          customerForm.get('name').touched &&
+                          customerForm.get('name').errors['required']
+                        "
+                        >{{
+                          customerType == 1 ? 'Company Name' : 'Supplier Name'
+                        }}
+                        is required</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >City<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-7">
+                      <ng-select
+                        [items]="cities"
+                        bindLabel="name"
+                        appendTo="body"
+                        formControlName="city"
+                      >
+                      </ng-select>
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          customerForm.get('city').invalid &&
+                          customerForm.get('city').touched &&
+                          customerForm.get('city').errors['required']
+                        "
+                        >City is required</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">
+                      Tax Reference No</label
+                    >
+                    <div class="col-sm-7">
+                      <input
+                        id="Name"
+                        autocomplete="off"
+                        class="form-control"
+                        formControlName="taxReferenceNumber"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >Country<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-7">
+                      <ng-select
+                        [items]="countries"
+                        bindLabel="name"
+                        appendTo="body"
+                        formControlName="country"
+                        (change)="getCitiesByCountryId($event)"
+                      >
+                      </ng-select>
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          customerForm.get('country').invalid &&
+                          customerForm.get('country').touched &&
+                          customerForm.get('country').errors['required']
+                        "
+                        >Country is required</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Address</label>
+                    <div class="col-sm-7">
+                      <input
+                        id="Address"
+                        autocomplete="off"
+                        class="form-control"
+                        formControlName="address"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <accordion [isAnimated]="true">
+                  <accordion-group
+                    [isOpen]="true"
+                    heading="Contact Information"
+                  >
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-sm-4 control-label"
+                          >Representative Name<span class="text-danger"
+                            >*</span
+                          ></label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            id="Name"
+                            autocomplete="off"
+                            class="form-control"
+                            formControlName="representativeName"
+                            type="text"
+                          />
+                          <span
+                            class="text-danger"
+                            *ngIf="
+                              customerForm.get('representativeName').invalid &&
+                              customerForm.get('representativeName').touched &&
+                              customerForm.get('representativeName').errors[
+                                'required'
+                              ]
+                            "
+                            >Representative Name is required</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-sm-4 control-label">Email</label>
+                        <div class="col-sm-7">
+                          <input
+                            id="Name"
+                            autocomplete="off"
+                            class="form-control"
+                            formControlName="email"
+                            type="text"
+                          />
+                          <span
+                            class="text-danger"
+                            *ngIf="
+                              customerForm.get('email').invalid &&
+                              customerForm.get('email').touched &&
+                              customerForm.get('email').errors['required']
+                            "
+                            >Email is required</span
+                          >
+                          <span
+                            class="text-danger"
+                            *ngIf="
+                              customerForm.get('email').invalid &&
+                              customerForm.get('email').touched &&
+                              customerForm.get('email').errors['pattern']
+                            "
+                            >Email is not valid</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-sm-4 control-label"
+                          >Mobile No<span class="text-danger">*</span></label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            id="Name"
+                            autocomplete="off"
+                            class="form-control"
+                            formControlName="mobileNumber"
+                            type="text"
+                          />
+                          <span
+                            class="text-danger"
+                            *ngIf="
+                              customerForm.get('mobileNumber').invalid &&
+                              customerForm.get('mobileNumber').touched &&
+                              customerForm.get('mobileNumber').errors[
+                                'required'
+                              ]
+                            "
+                            >Mobile No is required</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </accordion-group>
+                </accordion>
+              </div>
+
+              <div class="col-md-11">
+                <button
+                  type="submit"
+                  id="Save"
+                  class="btn btn-primary pull-right"
+                >
+                  <i class="fa fa-save"> Save</i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

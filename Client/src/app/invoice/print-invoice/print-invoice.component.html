@@ -1,0 +1,260 @@
+<style>
+  p,
+  span,
+  label {
+    font-size: large;
+  }
+</style>
+<div *ngIf="invoice" class="" id="page-wrapper">
+  <div class="container-fluid">
+    <div *ngIf="invoice.tax != 0" class="row row-stat">
+      <div class="col-md-12">
+        <div class="panel-body">
+          <div class="row form-horizontal">
+            <div class="col-md-6">
+              <img style="width: 121px" src="assets/images/IBS.jpg" />
+            </div>
+            <div class="col-md-6 pull-right">
+              <div></div>
+              <div>
+                <p
+                  style="font-size: large; text-decoration: underline"
+                  class="control-label text-bold text-right"
+                >
+                  IPS شركة انتجريتد برميم سوليوشن
+                </p>
+              </div>
+              <br />
+              <div>
+                <p class="control-label text-bold text-right">
+                  <span style="font-size: medium">143593</span>
+                  : السجل التجارى
+                </p>
+              </div>
+              <div>
+                <p class="control-label text-bold text-right">
+                  <span style="font-size: medium">915-216-570</span>
+                  : التسجيل الضريبى
+                </p>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row form-horizontal">
+            <div class="col-md-3"></div>
+            <div class="col-md-1">
+              <div>
+                <p
+                  style="color: midnightblue"
+                  class="control-label text-right text-bold"
+                >
+                  فاتورة مبيعات
+                </p>
+              </div>
+              <div class="text-right">
+                <p style="text-align: right" class="control-label text-bold">
+                  {{ invoice.salesInvoiceNumber }} /رقم
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="row form-horizontal">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+              <div>
+                <p class="control-label text-bold text-right">
+                  <span style="font-size: medium">{{
+                    invoice.invoiceDate + ' ' | date
+                  }}</span>
+                  <label> : التاريخ</label>
+                </p>
+              </div>
+              <div>
+                <p class="control-label text-bold text-right">
+                  <span style="font-size: medium">{{
+                    invoice.clientName + ' '
+                  }}</span>
+                  <label> : الى شركة</label>
+                </p>
+              </div>
+              <div>
+                <p class="control-label text-bold text-right">
+                  <span style="font-size: medium">
+                    {{ invoice.taxReferenceNumber + ' ' }}</span
+                  >
+                  <label> : التسجيل الضريبى</label>
+                </p>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <table style="line-height: 0.5" class="table table-bordered">
+              <thead>
+                <th
+                  style="text-align: center; font-size: 18px; font-weight: bold"
+                >
+                  البيان
+                </th>
+                <th>الكمية</th>
+                <th>السعر</th>
+                <th>الاجمالى</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of invoice.invoiceProducts">
+                  <td>
+                    {{
+                      item.productName != null
+                        ? item.productName
+                        : item.serviceName
+                    }}
+                  </td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.price }}</td>
+                  <td>{{ item.quantity * item.price }}</td>
+                </tr>
+                <tr>
+                  <td colspan="3">الاجمالى</td>
+                  <td>
+                    {{
+                      createTotalInvoiceAmount() +
+                        (invoice.transportaion ? invoice.transportaion : 0)
+                    }}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3">ضريبة %14</td>
+                  <td>
+                    {{ (createTotalInvoiceAmount() * invoice.tax) / 100 }}
+                  </td>
+                </tr>
+
+                <tr style="line-height: 5">
+                  <td colspan="3">اجمالى الفاتورة</td>
+                  <td>
+                    {{
+                      createTotalInvoiceAmount() +
+                        (createTotalInvoiceAmount() * invoice.tax) / 100 -
+                        (createTotalInvoiceAmount() * invoice.transfer) / 100 +
+                        (invoice.transportaion != null
+                          ? invoice.transportaion
+                          : 0)
+                    }}
+                    EGP
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br />
+        </div>
+      </div>
+    </div>
+    <div *ngIf="invoice.tax == 0" class="row row-stat">
+      <div class="col-md-12">
+        <div class="panel-body">
+          <div class="row form-horizontal">
+            <div class="col-md-3"></div>
+            <div class="col-md-1">
+              <div>
+                <h1 class="control-label text-right text-bold">
+                  Delivery note
+                </h1>
+              </div>
+            </div>
+          </div>
+          <div class="row form-horizontal">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+              <div>
+                <p class="control-label text-bold text-right">
+                  <span style="font-size: medium">{{
+                    invoice.invoiceDate + ' ' | date
+                  }}</span>
+                  <label> : التاريخ</label>
+                </p>
+              </div>
+              <div>
+                <p class="control-label text-bold text-right">
+                  <span style="font-size: medium">{{
+                    invoice.clientName != null
+                      ? invoice.clientName
+                      : invoice.supplierName + ' '
+                  }}</span>
+                  <label> :الساده</label>
+                </p>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <table style="line-height: 0.5" class="table table-bordered">
+              <thead>
+                <th
+                  style="text-align: center; font-size: 18px; font-weight: bold"
+                >
+                  Item
+                </th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of invoice.invoiceProducts">
+                  <td>
+                    {{
+                      item.productName != null
+                        ? item.productName
+                        : item.serviceName
+                    }}
+                  </td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.price }}</td>
+                  <td>{{ item.quantity * item.price }}</td>
+                </tr>
+                <tr>
+                  <td colspan="3">الاجمالى</td>
+                  <td>
+                    {{
+                      createTotalInvoiceAmount() +
+                        (invoice.transportaion ? invoice.transportaion : 0)
+                    }}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3">Shipping Cost</td>
+                  <td>
+                    {{
+                      invoice.transportaion != null ? invoice.transportaion : 0
+                    }}
+                  </td>
+                </tr>
+
+                <tr style="line-height: 5">
+                  <td colspan="3">اجمالى الفاتورة</td>
+                  <td>
+                    {{
+                      createTotalInvoiceAmount() +
+                        (createTotalInvoiceAmount() * invoice.tax) / 100 -
+                        (createTotalInvoiceAmount() * invoice.transfer) / 100 +
+                        (invoice.transportaion != null
+                          ? invoice.transportaion
+                          : 0)
+                    }}
+                    EGP
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<br />
+<footer class="text-right">
+  <label for="">{{ footer }}</label>
+</footer>

@@ -1,0 +1,89 @@
+<div class="" id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row row-stat">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading panel-heading-divider">
+            Update Overall Credit
+            <span class="panel-subtitle">Save credit information</span>
+          </div>
+          <div class="panel-body">
+            <div class="panel-heading panel-heading-no-divider">
+              <app-section-header></app-section-header>
+            </div>
+            <form
+              class="row form-horizontal"
+              [formGroup]="creditForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >Bank Credit <span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-7">
+                      <input
+                        id="bankCredit"
+                        autocomplete="off"
+                        class="form-control"
+                        formControlName="bankCredit"
+                        type="number"
+                      />
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          creditForm.get('bankCredit').invalid &&
+                          creditForm.get('bankCredit').touched &&
+                          creditForm.get('bankCredit').errors['required']
+                        "
+                      >
+                        Bank Credit is required</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >Cash Credit <span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-7">
+                      <input
+                        id="cashCredit"
+                        autocomplete="off"
+                        class="form-control"
+                        formControlName="cashCredit"
+                        type="number"
+                      />
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          creditForm.get('cashCredit').invalid &&
+                          creditForm.get('cashCredit').touched &&
+                          creditForm.get('cashCredit').errors['required']
+                        "
+                      >
+                        Cash Credit is required</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-11">
+                <button
+                  type="submit"
+                  id="Save"
+                  class="btn btn-primary pull-right"
+                >
+                  <i class="fa fa-save"> Save</i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

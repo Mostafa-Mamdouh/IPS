@@ -1,0 +1,624 @@
+<div class="" id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row row-stat">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading panel-heading-divider">
+            {{ invoiceId > 0 ? 'Edit' : 'Add' }}
+            {{ invoiceType == 1 ? 'Purchase' : 'Sales' }} Invoice<span
+              class="panel-subtitle"
+              >Save {{ invoiceType == 1 ? 'purchase' : 'sales' }} invoice
+              information</span
+            >
+          </div>
+          <div class="panel-body">
+            <div class="panel-heading panel-heading-no-divider">
+              <app-section-header></app-section-header>
+            </div>
+            <form
+              class="row form-horizontal"
+              [formGroup]="invoiceForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >Tax Invoice ?<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-6">
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id="customCheckDisabled"
+                          formControlName="isTax"
+                          (change)="isTax($event)"
+                        />
+                        <label
+                          class="custom-control-label"
+                          for="customCheckDisabled"
+                          >( فاتوره ضريبية )</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6"></div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >{{ invoiceType == 1 ? 'Supplier' : 'Client'
+                      }}<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-6">
+                      <ng-select
+                        [items]="customers"
+                        bindLabel="name"
+                        appendTo="body"
+                        formControlName="{{
+                          invoiceType == 1 ? 'supplier' : 'client'
+                        }}"
+                      >
+                      </ng-select>
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('supplier').invalid &&
+                          invoiceForm.get('supplier').touched &&
+                          invoiceForm.get('supplier').errors['required']
+                        "
+                        >Supplier is required</span
+                      >
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('client').invalid &&
+                          invoiceForm.get('client').touched &&
+                          invoiceForm.get('client').errors['required']
+                        "
+                        >Client is required</span
+                      >
+                    </div>
+                    <div class="col-sm-1">
+                      <a
+                        title="Add New {{
+                          invoiceType == 1 ? 'supplier' : 'client'
+                        }}"
+                        routerLink="/{{
+                          invoiceType == 1 ? 'supplier' : 'client'
+                        }}/add"
+                        class="action-button"
+                      >
+                        <i class="fa fa-plus"></i
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >{{ invoiceType == 1 ? 'Invoice Number' : 'Broker Name'
+                      }}<span *ngIf="invoiceType == 1" class="text-danger"
+                        >*</span
+                      ></label
+                    >
+                    <div class="col-sm-7">
+                      <input
+                        id="{{
+                          invoiceType == 1 ? 'Invoice Number' : 'Broker Name'
+                        }}"
+                        autocomplete="off"
+                        class="form-control"
+                        formControlName="{{
+                          invoiceType == 1 ? 'invoiceNumber' : 'brokerName'
+                        }}"
+                        type="text"
+                      />
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('invoiceNumber').invalid &&
+                          invoiceForm.get('invoiceNumber').touched &&
+                          invoiceForm.get('invoiceNumber').errors['required']
+                        "
+                        >Invoice Number is required</span
+                      >
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('brokerName').invalid &&
+                          invoiceForm.get('brokerName').touched &&
+                          invoiceForm.get('brokerName').errors['required']
+                        "
+                        >Broker Name is required</span
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >Service<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-6">
+                      <ng-select
+                        [items]="services"
+                        bindLabel="name"
+                        appendTo="body"
+                        multiple="true"
+                        formControlName="service"
+                        (change)="resetInvoiceServices()"
+                      >
+                      </ng-select>
+                    </div>
+                    <div class="col-sm-1">
+                      <a
+                        title="Add New Service"
+                        routerLink="/service/add"
+                        class="action-button"
+                      >
+                        <i class="fa fa-plus"></i
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >Invoice Date<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-7">
+                      <input
+                        type="text"
+                        class="form-control"
+                        bsDatepicker
+                        [bsConfig]="{ isAnimated: true }"
+                        [maxDate]="maxDate"
+                        formControlName="invoiceDate"
+                        [bsConfig]="{
+                          dateInputFormat: 'DD-MM-YYYY',
+                          showClearButton: true,
+                          clearPosition: 'right',
+                          showTodayButton: true,
+                          todayPosition: 'left'
+                        }"
+                      />
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('invoiceDate').invalid &&
+                          invoiceForm.get('invoiceDate').touched &&
+                          invoiceForm.get('invoiceDate').errors['required']
+                        "
+                        >Invoice Date is required</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >Product<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-6">
+                      <ng-select
+                        [items]="products"
+                        bindLabel="displayValue"
+                        appendTo="body"
+                        multiple="true"
+                        formControlName="product"
+                        (change)="resetInvoiceProducts()"
+                      >
+                      </ng-select>
+                    </div>
+                    <div class="col-sm-1">
+                      <a
+                        title="Add New Product"
+                        routerLink="/product/add"
+                        class="action-button"
+                      >
+                        <i class="fa fa-plus"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Note</label>
+                    <div class="col-sm-7">
+                      <textarea
+                        formControlName="note"
+                        id=""
+                        class="form-control"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <ng-container
+                *ngIf="
+                  currentInvoiceProductItems$
+                    | async as currentInvoiceProductItems
+                "
+              >
+                <div
+                  class="col-md-8"
+                  *ngIf="currentInvoiceProductItems.length > 0"
+                >
+                  <accordion [isAnimated]="true">
+                    <accordion-group
+                      [isOpen]="true"
+                      heading="Quantities & Cost"
+                    >
+                      <div
+                        formArrayName="invoiceProducts"
+                        *ngFor="
+                          let item of invoiceForm.get('invoiceProducts')[
+                            'controls'
+                          ];
+                          let i = index
+                        "
+                      >
+                        <div [formGroupName]="i">
+                          <div class="form-group">
+                            <div class="row">
+                              <div class="col-sm-2">
+                                <label
+                                  *ngIf="
+                                    item.controls['productName'].value !== ''
+                                  "
+                                  class="control-label productName"
+                                  >{{
+                                    item.controls['productName'].value
+                                  }}</label
+                                >
+                                <label
+                                  *ngIf="
+                                    item.controls['serviceName'].value !== ''
+                                  "
+                                  class="control-label serviceName"
+                                  >{{
+                                    item.controls['serviceName'].value
+                                  }}</label
+                                >
+                              </div>
+                              <div class="col-sm-3 d-flex">
+                                <label class="control-label mr-2">
+                                  Quantity
+                                </label>
+                                <div>
+                                  <input
+                                    type="number"
+                                    min="1"
+                                    formControlName="quantity"
+                                    class="form-control"
+                                    (change)="updateTotalInvoiceAmount()"
+                                  />
+                                  <span
+                                    class="text-danger"
+                                    *ngIf="
+                                      item.get('quantity').invalid &&
+                                      item.get('quantity').touched &&
+                                      item.get('quantity').errors['required']
+                                    "
+                                    >Quantity is required</span
+                                  >
+                                  <span
+                                    class="text-danger"
+                                    *ngIf="
+                                      item.get('quantity').invalid &&
+                                      item.get('quantity').touched &&
+                                      item.get('quantity').errors['max']
+                                    "
+                                    >You exceed stock availability</span
+                                  >
+                                  <span
+                                    class="text-danger"
+                                    *ngIf="
+                                      item.get('quantity').invalid &&
+                                      item.get('quantity').touched &&
+                                      item.get('quantity').errors['min']
+                                    "
+                                    >Min quantity is one</span
+                                  >
+                                </div>
+                              </div>
+                              <div class="col-sm-3 d-flex">
+                                <label class="control-label mr-2">
+                                  {{ invoiceType == 1 ? 'Cost' : 'Price' }}
+                                </label>
+                                <div>
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    formControlName="price"
+                                    class="form-control"
+                                    (change)="updateTotalInvoiceAmount()"
+                                  />
+                                  <span
+                                    class="text-danger"
+                                    *ngIf="
+                                      item.get('price').invalid &&
+                                      item.get('price').touched &&
+                                      item.get('price').errors['required']
+                                    "
+                                    >Cost is required</span
+                                  >
+                                  <span
+                                    class="text-danger"
+                                    *ngIf="
+                                      item.get('price').invalid &&
+                                      item.get('price').touched &&
+                                      item.get('price').errors['pattern']
+                                    "
+                                    >Accept two decimal place</span
+                                  >
+                                </div>
+                              </div>
+                              <div class="col-sm-3 d-flex">
+                                <label class="control-label mr-2">
+                                  Total
+                                </label>
+                                <label class="control-label total">
+                                  {{
+                                    item.controls['quantity'].value *
+                                      item.controls['price'].value
+                                      | number: '1.1-5'
+                                  }}
+                                  L.E
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-8"></div>
+                        <div class="col-sm-3 d-flex">
+                          <label class="control-label mr-2"> Total P/S </label>
+                          <label class="control-label total">
+                            {{ totalInvoiceAmount | number: '1.1-5' }}
+                            L.E
+                          </label>
+                        </div>
+                      </div>
+                    </accordion-group>
+                  </accordion>
+                </div>
+              </ng-container>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >Tax<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-2">
+                      <input
+                        id=""
+                        formControlName="tax"
+                        class="form-control"
+                        min="0"
+                        max="100"
+                        type="number"
+                      />
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('tax').invalid &&
+                          invoiceForm.get('tax').touched &&
+                          invoiceForm.get('tax').errors['min']
+                        "
+                        >Min percentage is zero</span
+                      >
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('tax').invalid &&
+                          invoiceForm.get('tax').touched &&
+                          invoiceForm.get('tax').errors['max']
+                        "
+                        >max percentage is 100</span
+                      >
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('tax').invalid &&
+                          invoiceForm.get('tax').touched &&
+                          invoiceForm.get('tax').errors['required']
+                        "
+                        >Tax is required</span
+                      >
+                    </div>
+                    <div class="col-sm-1 perc">
+                      <span class="">%</span>
+                    </div>
+                    <div class="col-sm-2 amount">
+                      <label id="" class="control-label taxAmount">{{
+                        (totalInvoiceAmount *
+                          invoiceForm.controls['tax'].value) /
+                          100 | number: '1.1-5'
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label"
+                      >Transfer<span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-2">
+                      <input
+                        id=""
+                        formControlName="transfer"
+                        class="form-control"
+                        min="0"
+                        max="100"
+                        type="number"
+                      />
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('transfer').invalid &&
+                          invoiceForm.get('transfer').touched &&
+                          invoiceForm.get('transfer').errors['min']
+                        "
+                        >Min percentage is zero</span
+                      >
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('transfer').invalid &&
+                          invoiceForm.get('transfer').touched &&
+                          invoiceForm.get('transfer').errors['max']
+                        "
+                        >max percentage is 100</span
+                      >
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('transfer').invalid &&
+                          invoiceForm.get('transfer').touched &&
+                          invoiceForm.get('transfer').errors['required']
+                        "
+                        >Tax is required</span
+                      >
+                    </div>
+                    <div class="col-sm-1 perc">
+                      <span class="">%</span>
+                    </div>
+                    <div class="col-sm-2 amount">
+                      <label id="" class="control-label transferAmount">{{
+                        (totalInvoiceAmount *
+                          invoiceForm.controls['transfer'].value) /
+                          100 | number: '1.1-5'
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">{{
+                      invoiceType == 1 ? 'Additional Fees' : 'Transportation'
+                    }}</label>
+                    <div class="col-sm-7">
+                      <input
+                        id=""
+                        formControlName="{{
+                          invoiceType == 1 ? 'additionalFees' : 'transportation'
+                        }}"
+                        class="form-control"
+                        min="0"
+                        type="number"
+                      />
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('additionalFees').invalid &&
+                          invoiceForm.get('additionalFees').touched &&
+                          invoiceForm.get('additionalFees').errors['min']
+                        "
+                        >Min amount is zero</span
+                      >
+                      <span
+                        class="text-danger"
+                        *ngIf="
+                          invoiceForm.get('transportation').invalid &&
+                          invoiceForm.get('transportation').touched &&
+                          invoiceForm.get('additionalFees').errors['min']
+                        "
+                        >Min amount is zero</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Total Invoice</label>
+                    <div class="col-sm-5">
+                      <label
+                        *ngIf="invoiceType == 1"
+                        id=""
+                        class="control-label totalInvoice"
+                        >{{
+                          totalInvoiceAmount +
+                            (totalInvoiceAmount *
+                              invoiceForm.controls['tax'].value) /
+                              100 -
+                            (totalInvoiceAmount *
+                              invoiceForm.controls['transfer'].value) /
+                              100 +
+                            (invoiceForm.controls['additionalFees'].value !=
+                            null
+                              ? invoiceForm.controls['additionalFees'].value
+                              : 0) | number: '1.1-5'
+                        }}</label
+                      >
+
+                      <label
+                        *ngIf="invoiceType == 2"
+                        id=""
+                        class="control-label totalInvoice"
+                        >{{
+                          totalInvoiceAmount +
+                            (totalInvoiceAmount *
+                              invoiceForm.controls['tax'].value) /
+                              100 -
+                            (totalInvoiceAmount *
+                              invoiceForm.controls['transfer'].value) /
+                              100 +
+                            (invoiceForm.controls['transportation'].value !=
+                            null
+                              ? invoiceForm.controls['transportation'].value
+                              : 0) | number: '1.1-5'
+                        }}</label
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="invoiceType == 1" class="col-md-6">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="col-sm-3 control-label">Attachment</label>
+                    <div class="col-sm-9">
+                      <app-upload-file
+                        (onFileUploaded)="attachArchieveId($event)"
+                      ></app-upload-file>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-11">
+                <button
+                  type="submit"
+                  id="Save"
+                  class="btn btn-primary pull-right"
+                >
+                  <i class="fa fa-save"> Save</i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
